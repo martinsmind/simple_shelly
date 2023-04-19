@@ -1,10 +1,10 @@
-#Simple_Shell Project
+#C - Simple Shell
 
 
 In this project, we'll learn to work collaboratively using GitHub to create a Simple Shell
 
 
-##List of allowed functions and system calls for this project
+#List of allowed functions and system calls for this project
 
 access (man 2 access)
 
@@ -67,7 +67,7 @@ wait4 (man 2 wait4)
 write (man 2 write)
 
 
-##Compilation
+#Compilation
 
 
 Your shell will be compiled this way:
@@ -75,7 +75,7 @@ Your shell will be compiled this way:
 gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 
 
-##Authors:
+#Authors:
 
 
 [Nwoha Martins](https://github.com/martinsmind)

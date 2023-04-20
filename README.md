@@ -78,6 +78,6 @@ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 #Authors:
 
 
-[Nwoha Martins](https://github.com/martinsmind)
+[Nwoha Martins](https://github.com/martinsmind) and 
 [Okechukwu Victor](https://github.com/covstar)
 

@@ -1,98 +1,85 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
- * not_found - write error ("sh: 1: lss: not found")
- * @str: user's typed command
- * @c_n: nth user's typed command
- * @env: bring in environmental variables linked list to write shell name
+ *_eputs - prints an input string
+ * @str: the string to be printed
+ *
+ * Return: Nothing
  */
-void not_found(char *str, int c_n, list_t *env)
+void _eputs(char *str)
 {
-	int count = 0;
-	char *shell, *num;
+	int i = 0;
 
-	shell = get_env("_", env); /* get shell name to write */
-	while (shell[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, shell, count);
-	free(shell);
-	write(STDOUT_FILENO, ": ", 2);
-	num = int_to_string(c_n); /* convert cmd line num to string to write */
-	count = 0;
-	while (num[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, num, count);
-	free(num);
-	write(STDOUT_FILENO, ": ", 2);
-	count = 0;
-	while (str[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, str, count);
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, "not found\n", 10);
+	if (!str)
+		return;
+	while (str[i] != '\0')
+	{
+		_eputchar(str[i]);
+		i++;
+	}
 }
 
 /**
- * cant_cd_to - write error ("sh: 2: cd: can't cd to xyz")
- * @str: user's typed argument after the cmd cd
- * @c_n: nth user's typed command
- * @env: bring in environmental variables linked list to write shell name
+ * _eputchar - writes the character c to stderr
+ * @c: The character to print
+ *
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
  */
-void cant_cd_to(char *str, int c_n, list_t *env)
+int _eputchar(char c)
 {
-	int count = 0;
-	char *shell, *num;
+	static int i;
+	static char buf[WRITE_BUF_SIZE];
 
-	shell = get_env("_", env);
-	while (shell[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, shell, count);
-	free(shell);
-	write(STDOUT_FILENO, ": ", 2);
-	num = int_to_string(c_n);
-	count = 0;
-	while (num[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, num, count);
-	free(num);
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, "cd: can't cd to ", 16);
-	count = 0;
-	while (str[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, str, count);
-	write(STDOUT_FILENO, "\n", 1);
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
+	{
+		write(2, buf, i);
+		i = 0;
+	}
+	if (c != BUF_FLUSH)
+		buf[i++] = c;
+	return (1);
 }
 
 /**
- * illegal_number - write error ("sh: 3: exit: Illegal number abc (or -1)")
- * @str: user's typed argument after the cmd exit
- * @c_n: nth user's typed command
- * @env: bring in environmental variables linked list to write shell name
+ * _putfd - writes the character c to given fd
+ * @c: The character to print
+ * @fd: The filedescriptor to write to
+ *
+ * Return: On success 1.
+ * On error, -1 is returned, and errno is set appropriately.
  */
-void illegal_number(char *str, int c_n, list_t *env)
+int _putfd(char c, int fd)
 {
-	int count = 0;
-	char *shell = NULL, *num = NULL;
+	static int i;
+	static char buf[WRITE_BUF_SIZE];
 
-	shell = get_env("_", env);
-	while (shell[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, shell, count);
-	free(shell);
-	write(STDOUT_FILENO, ": ", 2);
-	num = int_to_string(c_n);
-	count = 0;
-	while (num[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, num, count);
-	free(num);
-	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, "exit: Illegal number: ", 22);
-	count = 0;
-	while (str[count] != '\0')
-		count++;
-	write(STDOUT_FILENO, str, count);
-	write(STDOUT_FILENO, "\n", 1);
+	if (c == BUF_FLUSH || i >= WRITE_BUF_SIZE)
+	{
+		write(fd, buf, i);
+		i = 0;
+	}
+	if (c != BUF_FLUSH)
+		buf[i++] = c;
+	return (1);
+}
+
+/**
+ *_putsfd - prints an input string
+ * @str: the string to be printed
+ * @fd: the filedescriptor to write to
+ *
+ * Return: the number of chars put
+ */
+int _putsfd(char *str, int fd)
+{
+	int i = 0;
+
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		i += _putfd(*str++, fd);
+	}
+	return (i);
 }

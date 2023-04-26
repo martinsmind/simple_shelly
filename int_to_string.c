@@ -1,67 +1,75 @@
-#include <stdio.h>
 #include "shell.h"
 
 /**
- * numlen - counts number of 0s in a tens power number
- * @n: number
- * Return: returns count of digits
+ * _strlen - returns the length of a string
+ * @s: the string whose length to check
+ *
+ * Return: integer length of string
  */
-int numlen(int n)
+int _strlen(char *s)
 {
-	int count = 0;
-	int num = n;
+	int i = 0;
 
-	while (num > 9 || num < -9)
-	{
-		num /= 10;
-		count++;
-	}
-	return (count);
-}
-/**
- * int_to_string - turns an int into a string
- * @number: int
- * Return: returns the int as a string. returns NULL if failed
- */
+	if (!s)
+		return (0);
 
-char *int_to_string(int number)
-{
-	int digits, tens, i = 0, t = 0, x;
-	char *res;
-
-	digits = number;
-	tens = 1;
-
-	if (number < 0)
-		t = 1;
-	res = malloc(sizeof(char) * (numlen(digits) + 2 + t));
-	if (res == NULL)
-		return (NULL);
-	if (number < 0)
-	{
-		res[i] = '-';
+	while (*s++)
 		i++;
-	}
-	for (x = 0; digits > 9 || digits < -9; x++)
+	return (i);
+}
+
+/**
+ * _strcmp - performs lexicogarphic comparison of two strangs.
+ * @s1: the first strang
+ * @s2: the second strang
+ *
+ * Return: negative if s1 < s2, positive if s1 > s2, zero if s1 == s2
+ */
+int _strcmp(char *s1, char *s2)
+{
+	while (*s1 && *s2)
 	{
-		digits /= 10;
-		tens *= 10;
+		if (*s1 != *s2)
+			return (*s1 - *s2);
+		s1++;
+		s2++;
 	}
-	for (digits = number; x >= 0; x--)
-	{
-		if (digits < 0)
-		{
-			res[i] = (digits / tens) * -1 + '0';
-			i++;
-		}
-		else
-		{
-			res[i] = (digits / tens) + '0';
-			i++;
-		}
-		digits %= tens;
-		tens /= 10;
-	}
-	res[i] = '\0';
-	return (res);
+	if (*s1 == *s2)
+		return (0);
+	else
+		return (*s1 < *s2 ? -1 : 1);
+}
+
+/**
+ * starts_with - checks if needle starts with haystack
+ * @haystack: string to search
+ * @needle: the substring to find
+ *
+ * Return: address of next char of haystack or NULL
+ */
+char *starts_with(const char *haystack, const char *needle)
+{
+	while (*needle)
+		if (*needle++ != *haystack++)
+			return (NULL);
+	return ((char *)haystack);
+}
+
+/**
+ * _strcat - concatenates two strings
+ * @dest: the destination buffer
+ * @src: the source buffer
+ *
+ * Return: pointer to destination buffer
+ */
+char *_strcat(char *dest, char *src)
+{
+	char *ret = dest;
+
+	while (*dest)
+		dest++;
+	while (*src)
+		*dest++ = *src++;
+	*dest = *src;
+	return (ret);
 }

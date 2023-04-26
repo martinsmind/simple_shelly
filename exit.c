@@ -1,50 +1,74 @@
 #include "shell.h"
 
 /**
- * c_atoi - custom atoi converts string to int
- * @s: string
- * Return: number if success, -1 if string contains non-numbers
+ **_strncpy - copies a string
+ *@dest: the destination string to be copied to
+ *@src: the source string
+ *@n: the amount of characters to be copied
+ *Return: the concatenated string
  */
-int c_atoi(char *s)
+char *_strncpy(char *dest, char *src, int n)
 {
-	int i = 0;
-	unsigned int num = 0;
+	int i, j;
+	char *s = dest;
 
-	while (s[i] != '\0')
+	i = 0;
+	while (src[i] != '\0' && i < n - 1)
 	{
-		if (s[i] >= '0' && s[i] <= '9') /* calculate num */
-			num = num * 10 + (s[i] - '0');
-		if (s[i] > '9' || s[i] < '0') /* account for non-numbers */
-			return (-1);
+		dest[i] = src[i];
 		i++;
 	}
-	return (num);
+	if (i < n)
+	{
+		j = i;
+		while (j < n)
+		{
+			dest[j] = '\0';
+			j++;
+		}
+	}
+	return (s);
 }
 
 /**
- * __exit - frees user input and then exits main program with a value
- * @str: user's command into shell (e.g. "exit 99")
- * @env: bring in environmental variable to free at error
- * @num: bring in nth user command line input to print in error message
- * @command: bring in command to free
- * Return: 0 if success 2 if fail
+ **_strncat - concatenates two strings
+ *@dest: the first string
+ *@src: the second string
+ *@n: the amount of bytes to be maximally used
+ *Return: the concatenated string
  */
-int __exit(char **str, list_t *env, int num, char **command)
+char *_strncat(char *dest, char *src, int n)
 {
-	int e_value = 0;
+	int i, j;
+	char *s = dest;
 
-	if (str[1] != NULL) /* if no value given after exit, return 0 */
-		e_value = c_atoi(str[1]);
-
-	if (e_value == -1) /* if value given after exit is invalid, perror */
+	i = 0;
+	j = 0;
+	while (dest[i] != '\0')
+		i++;
+	while (src[j] != '\0' && j < n)
 	{
-		illegal_number(str[1], num, env); /* print error msg */
-		free_double_ptr(str);
-		return (2);
+		dest[i] = src[j];
+		i++;
+		j++;
 	}
-	free_double_ptr(str); /* free user input before exiting program */
-	free_linked_list(env);
-	if (command != NULL)
-		free_double_ptr(command);
-	exit(e_value);
+	if (j < n)
+		dest[i] = '\0';
+	return (s);
+}
+
+/**
+ **_strchr - locates a character in a string
+ *@s: the string to be parsed
+ *@c: the character to look for
+ *Return: (s) a pointer to the memory area s
+ */
+char *_strchr(char *s, char c)
+{
+	do {
+		if (*s == c)
+			return (s);
+	} while (*s++ != '\0');
+
+	return (NULL);
 }
